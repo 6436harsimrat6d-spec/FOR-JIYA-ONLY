@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Just for You 💖</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(#ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    .screen {
+      display: none;
+      max-width: 90%;
+      color: #b30059;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .screen.active {
+      display: block;
+      opacity: 1;
+    }
+
+    h1 {
+      font-size: 32px;
+    }
+
+    p {
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .love-btn {
+      background: #ff3366;
+      color: white;
+    }
+
+    .soft-btn {
+      background: white;
+      color: #ff3366;
+    }
+
+    #yes {
+      background: #ff3366;
+      color: white;
+      position: absolute;
+      left: 42%;
+      top: 70%;
+    }
+
+    #no {
+      background: white;
+      color: #ff3366;
+      position: absolute;
+      left: 55%;
+      top: 70%;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 20px;
+      animation: float 6s linear infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh); }
+      100% { transform: translateY(-10vh); }
+    }
+
+    .cursor {
+      display: inline-block;
+      margin-left: 3px;
+      animation: blink 1s infinite;
+      font-weight: bold;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SCREEN 0 : START -->
+  <div id="startScreen" class="screen active">
+    <h1>Hey Jiya 💕</h1>
+    <p>I made something just for you.</p>
+    <button class="love-btn" onclick="goToPoem()">Press to Start 💖</button>
+  </div>
+
+  <!-- SCREEN 1 : POEM -->
+  <div id="poemScreen" class="screen">
+    <p id="poemText"></p>
+
+    <div class="btn-row" id="poemButtons" style="display:none;">
+      <button class="love-btn" onclick="goToValentine()">omg harsimrat iloveyou ❤️</button>
+      <button class="soft-btn" onclick="goToValentine()">so bad english but iloveyou still 😭❤️</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2 : VALENTINE -->
+  <div id="valentineScreen" class="screen">
+    <h1>Jiya, will you be my Valentine? 💖</h1>
+    <button id="yes">Yes ❤️</button>
+    <button id="no">No 💔</button>
+  </div>
+
+  <!-- SCREEN 3 : HAPPIEST -->
+  <div id="happyScreen" class="screen">
+    <h1>You just made me the happiest 💕</h1>
+    <p>I love you so much, Jiya ❤️</p>
+    <button class="love-btn" onclick="goToWhy()">Continue 💖</button>
+  </div>
+
+  <!-- SCREEN 4 : WHY -->
+  <div id="whyScreen" class="screen">
+    <h1 id="whyText"></h1>
+    <p id="whySubText"></p>
+    <button class="love-btn" onclick="goToBecause()">Press to know the answer 💖</button>
+  </div>
+
+  <!-- SCREEN 5 : BECAUSE -->
+  <div id="becauseScreen" class="screen">
+    <h1 id="becauseText"></h1>
+  </div>
+
+  <audio id="music" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3">
+  </audio>
+
+  <script>
+    const poemLines = [
+      "Jiya",
+      "",
+      "Everytime I look at you,",
+      "You make me feel alive.",
+      "",
+      "Without you, life is colourless.",
+      "Without us, I'm worthless.",
+      "",
+      "But when you leave,",
+      "I have nothing but your memories,",
+      "The way you talked,",
+      "The way you took my heart..",
+      "",
+      "Your eyes, not with those stupid lenses,",
+      "They don't do justice to the soulful eyes you have..",
+      "",
+      "Your laughter, making my life just wonderful.",
+      "",
+      "It feels so delightful to be with nothing,",
+      "But you and only you..",
+      "",
+      "At the end, all I have to say is,",
+      "You make me wanna live 7000 years",
+      "If it means being by your side.",
+      "",
+      "— From someone who cherishes and loves you till infinity ♾️"
+    ];
+
+    const startScreen = document.getElementById("startScreen");
+    const poemScreen = document.getElementById("poemScreen");
+    const valentineScreen = document.getElementById("valentineScreen");
+    const happyScreen = document.getElementById("happyScreen");
+    const whyScreen = document.getElementById("whyScreen");
+    const becauseScreen = document.getElementById("becauseScreen");
+    const poemText = document.getElementById("poemText");
+    const poemButtons = document.getElementById("poemButtons");
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const music = document.getElementById("music");
+
+    function goToPoem() {
+      startScreen.classList.remove("active");
+      poemScreen.classList.add("active");
+      typePoem();
+    }
+
+    function goToValentine() {
+      poemScreen.classList.remove("active");
+      valentineScreen.classList.add("active");
+    }
+
+    function goToWhy() {
+      happyScreen.classList.remove("active");
+      whyScreen.classList.add("active");
+      setTimeout(showWhyText, 300);
+    }
+
+    function goToBecause() {
+      whyScreen.classList.remove("active");
+      becauseScreen.classList.add("active");
+      setTimeout(showBecauseText, 300);
+    }
+
+    yesBtn.addEventListener("click", () => {
+      music.play();
+      valentineScreen.classList.remove("active");
+      happyScreen.classList.add("active");
+    });
+
+    noBtn.addEventListener("mouseover", () => {
+      noBtn.style.left = Math.random() * 80 + "%";
+      noBtn.style.top = Math.random() * 80 + "%";
+      noBtn.innerText = "Please? 🥺";
+    });
+
+    function typeLine(text, speed = 45) {
+      return new Promise(resolve => {
+        const cursor = document.createElement("span");
+        cursor.className = "cursor";
+        cursor.innerText = "|";
+        poemText.appendChild(cursor);
+
+        let i = 0;
+        const interval = setInterval(() => {
+          cursor.remove();
+          poemText.innerHTML += text.charAt(i);
+          poemText.appendChild(cursor);
+          i++;
+          if (i >= text.length) {
+            clearInterval(interval);
+            cursor.remove();
+            poemText.innerHTML += "<br>";
+            resolve();
+          }
+        }, speed);
+      });
+    }
+
+    async function typePoem() {
+      poemText.innerHTML = "";
+      poemButtons.style.display = "none";
+      for (let line of poemLines) {
+        await typeLine(line);
+      }
+      poemButtons.style.display = "flex";
+    }
+
+    function typeText(el, text, speed = 60) {
+      el.innerHTML = "";
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+      cursor.innerText = "|";
+      el.appendChild(cursor);
+      let i = 0;
+      const interval = setInterval(() => {
+        cursor.remove();
+        el.innerHTML += text.charAt(i);
+        el.appendChild(cursor);
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+          cursor.remove();
+        }
+      }, speed);
+    }
+
+    function showWhyText() {
+      typeText(document.getElementById("whyText"), "You must be wondering", 60);
+      setTimeout(() => {
+        typeText(document.getElementById("whySubText"), "why I did all of this", 50);
+      }, 1500);
+    }
+
+    function showBecauseText() {
+      typeText(document.getElementById("becauseText"), "Because I love you ❤️", 70);
+    }
+
+    setInterval(() => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "💗";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 15 + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }, 500);
+  </script>
+
+</body>
+</html>
